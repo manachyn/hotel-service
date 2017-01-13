@@ -1,0 +1,55 @@
+<wsdl:definitions
+        name="HotelService"
+        targetNamespace="http://im.com/services/hotel"
+        xmlns:tns="http://im.com/services/hotel"
+        xmlns:types="http://im.com/services/hotel/types"
+        xmlns:exception="http://im.com/services/hotel/exception"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://im.com/services/hotel"
+                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                    attributeFormDefault="qualified"
+                    elementFormDefault="qualified">
+            <xsd:include schemaLocation="Hotel.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="SearchHotelsIn">
+        <wsdl:part name="parameters" element="types:SearchHotelsRequest"/>
+    </wsdl:message>
+    <wsdl:message name="SearchHotelsOut">
+        <wsdl:part name="parameters" element="types:SearchHotelsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="SearchHotelsException">
+        <wsdl:part name="parameters" element="exception:SearchHotelsException"/>
+    </wsdl:message>
+    <wsdl:portType name="HotelService">
+        <wsdl:operation name="searchHotels">
+            <wsdl:documentation>Search hotels</wsdl:documentation>
+            <wsdl:input message="tns:SearchHotelsIn"/>
+            <wsdl:output message="tns:SearchHotelsOut"/>
+            <wsdl:fault name="SearchHotelsException" message="tns:SearchHotelsException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="HotelService_Binding" type="tns:HotelService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="searchHotels">
+            <soap:operation soapAction="http://im.com/services/hotel/searchHotels"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="SearchHotelsException">
+                <soap:fault name="SearchHotelsException" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="HotelService_Service">
+        <wsdl:port name="HotelService" binding="tns:HotelService_Binding">
+            <soap:address location="http://localhost:9090/soap-api/hotel" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
